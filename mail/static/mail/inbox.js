@@ -41,13 +41,55 @@ function load_mailbox(mailbox) {
       // Print emails
       console.log(emails);
 
-      emails.forEach((item) => {
-        const element = document.createElement('div');
-        
-      })
+      // get new emails 
+      emails.forEach((email_elem) => {
+        const parent_elem = document.createElement('div');
+        add_emails(email_elem, parent_elem, mailbox);
 
-      // ... do something else with emails ...
-  });
+
+        document.querySelector('#emails-view').appendChild(parent_elem);
+      });
+
+      })
+}
+
+//Add new email with given contents to DOM
+function add_emails(email_elem, parent_elem, mailbox) {
+
+  //Create new post
+  const content = document.createElement('div');
+  const recipients = document.createElement('strong');
+  if (mailbox === 'sent') {
+    recipients.innerHTML = email_elem['recipients'].join(',') + ' ';
+  }
+  else {
+    recipients.innerHTML = email_elem['sender'] + ' ';
+  }
+  content.appendChild(recipients);
+
+  // Set and style the date.
+  const date = document.createElement("div");
+  date.innerHTML = email_elem["timestamp"];
+  date.style.display = "inline-block";
+  date.style.float = "right";
+
+  if (email_elem["read"]) {
+    parent_elem.style.backgroundColor = "grey";
+    date.style.color = "black";
+  } else {
+    date.className = "text-muted";
+  }
+  content.appendChild(date);
+
+  content.style.padding = "10px";
+  parent_elem.appendChild(content);
+
+
+  // Style the parent element.
+  parent_elem.style.borderStyle = "solid";
+  parent_elem.style.borderWidth = "3px";
+  parent_elem.style.margin = "10px";
+  
 
 }
 
