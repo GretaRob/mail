@@ -56,6 +56,12 @@ function load_mailbox(mailbox) {
 
 //Add new email with given contents to DOM
 function add_emails(email_elem, parent_elem, mailbox) {
+  if (mailbox === "inbox" && email_elem["archived"]) {
+    return;
+  }
+  else if (mailbox === "archive" && !email_elem["archived"]) {
+    return;
+  }
 
   //Create new post
   const content = document.createElement('div');
@@ -131,13 +137,36 @@ function open_email(id) {
         document.querySelector("#email-display").appendChild(document.createElement("hr"));
         document.querySelector("#email-display").appendChild(body);
       
- 
+        // * Archive button
+        archive_button.innerHTML = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-archive-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/></svg>  ';
+        if (email["archived"]) {
+          archive_button.innerHTML = "Unarchive";
+        } else {
+          archive_button.innerHTML = "Archive";
+        }
+        archive_button.classList = "btn btn-outline-primary m-2";
+        archive_button.addEventListener("click", () => {
+          archive_email(email);
+          load_mailbox("inbox");
   });
 
   fetch(`/emails/${id}`, {
     method: 'PUT',
     body: JSON.stringify({
         read: true
+    })
+  })
+
+ 
+  });
+
+}
+
+function archive_email(email) {
+  fetch(`/emails/${email['id']}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: !email['archived']
     })
   })
 }
