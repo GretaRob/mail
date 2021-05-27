@@ -133,6 +133,13 @@ function open_email(id) {
       
  
   });
+
+  fetch(`/emails/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: true
+    })
+  })
 }
 
 function send_email() {
