@@ -177,7 +177,7 @@ function reply_email(email) {
   // Clear out and prefill composition fields
   document.querySelector('#compose-recipients').value = email['sender'];
   document.querySelector('#compose-subject').value = ((email["subject"].match(/^(Re:)\s/)) ? email["subject"] : "Re: " + email["subject"]);
-  document.querySelector('#compose-body').value = '';
+  document.querySelector('#compose-body').value = `On ${email["timestamp"]} ${email["sender"]} wrote:\n${email["body"]}\n-------------------------------------\n`;
 }
 
 function archive_email(email) {
